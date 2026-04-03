@@ -1,19 +1,50 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import assets from '../assets/assets.js'
+import { useContext } from 'react'
+import { useEffect } from 'react'
+import { AuthContext } from '../context/AuthContext.jsx'
 
 const ProfilePage = () => {
 
+  const {authUser, updateProfile} = useContext(AuthContext);
   const [selectedImg, setSelectedImg] = useState(null)
-  const [name, setName] = useState('Martin Johnson')
-  const [bio, setBio] = useState('Hi Everyone! I want to Gather here ')
+  const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
+  console.log("AUTH USER:", authUser); // ✅ HERE
+
+  useEffect(() => {
+    if (authUser) {
+      setName(authUser.fullName || '');
+      setBio(authUser.bio || '');
+    }
+  }, [authUser]);// Depend on primitives, not object
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/');
-  }
+    if(!selectedImg)
+    {
+      await updateProfile({ fullName: name, bio });
+      navigate('/');
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedImg);
+    reader.onload = async () => {
+      const base64Img = reader.result;
 
+      await updateProfile({
+        profilePic: base64Img,
+        fullName: name,
+        bio
+      });
+
+      navigate('/'); // ✅ add this
+    }
+    
+  }
+ 
   return (
     <div className="min-h-screen bg-cover bg-no-repeat flex items-center justify-center">
 
@@ -51,7 +82,7 @@ const ProfilePage = () => {
           </button>
 
         </form>
-        <img className='max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10' src={assets.icon_logo} alt="Logo" />
+        <img className={`max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10 ${selectedImg && 'rounded-full'}`} src={authUser.profilePic || assets.icon_logo} alt="Logo" />
       </div>
     </div>
   )

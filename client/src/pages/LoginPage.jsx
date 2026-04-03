@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import assets, { userDummyData } from '../assets/assets.js'
 import showTerms from "./showTerms";
-
+import { AuthContext } from '../context/AuthContext.jsx';
+import { useContext } from 'react';
 
 
 const LoginPage = () => {
@@ -31,13 +32,28 @@ const LoginPage = () => {
   )
   const [agreed, setAgreed] = useState(false);
 
+  const { login } = useContext(AuthContext);
+
   const onSubmitHandler = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
+
+    if (!agreed) {
+      alert("Please agree to Terms & Conditions");
+      return;
+    }
+
     if (currState === "Sign Up" && !isSubmit) {
       setIsSubmit(true);
       return;
     }
-  }
+
+    login(currState === "Sign Up" ? "signup" : "login", {
+      fullName,
+      email,
+      password,
+      bio
+    });
+  };
   return (
     <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
       

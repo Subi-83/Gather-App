@@ -1,13 +1,23 @@
 import mongoose from "mongoose";
 
-// Function to connect to MongoDB
 export const connectDB = async (mongoURI) => {
-    try { 
-        mongoose.connection.on('connected', () => {
-            console.log('MongoDB connected successfully');
+    try {
+        mongoose.set("strictQuery", true);
+
+        await mongoose.connect(mongoURI);
+
+        console.log("MongoDB connected successfully");
+
+        mongoose.connection.on("disconnected", () => {
+            console.warn("MongoDB disconnected!");
         });
-        await mongoose.connect(`${process.env.MONGODB_URI}/chat-app`)
+
+        mongoose.connection.on("error", (err) => {
+            console.error("MongoDB connection error:", err);
+        });
+
     } catch (error) {
-        console.error("MongoDB connection error:", error);
-    }       
+        console.error("MongoDB connection failed:", error);
+        throw error;
+    }
 };
