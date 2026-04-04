@@ -10,7 +10,7 @@ import menu_icon from './menu_icon.png'
 import arrow_icon from './arrow_icon.png'
 import gallery_icon from './gallery_icon.svg'
 import avatar_icon from './avatar_icon.png'
-
+import help_icon from './help_icon.png'
 import code from './code.svg'
 import bgImage from './bgImage.jpg'
 
@@ -45,7 +45,8 @@ const assets = {
   pic1,
   pic2,
   pic3,
-  pic4
+  pic4,
+  help_icon
 }
 
 export default assets;

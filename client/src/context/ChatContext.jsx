@@ -22,7 +22,7 @@ export const ChatProvider = ({ children }) => {
             const {data} = await axios.get("/api/messages/users");
             if(data.success){
                 setUsers(data.users);
-                setUnseenMessages(data.unseenMessages);
+                setUnseenMessages(data.unseenMessageCounts);
             }
         } catch (err) {
            toast.error(err.message);
@@ -59,11 +59,13 @@ export const ChatProvider = ({ children }) => {
     // function to subscribe to messages for selected user
     const subscribeToMessages = () => {
             if(!socket) return;
-            socket.on("newMessage",(newMessage)=>{
-                if(selectedUser && newMessage.senderId === selectedUser._id){
+            socket.on("new-Message",(newMessage)=>{
+                if(selectedUser && newMessage.senderId.toString() === selectedUser._id.toString()){
                     newMessage.seen = true;
                     setMessages((prevMessages)=>[...prevMessages,newMessage]);
                     axios.put(`/api/messages/markAsSeen/${selectedUser._id}`);
+
+                    setUnseenMessages((prev)=>({ ...prev, [selectedUser._id]: 0 }));
                 } 
                 else{
                     setUnseenMessages((prevUnseenMessages)=>({
@@ -89,7 +91,7 @@ export const ChatProvider = ({ children }) => {
         users,
         selectedUser,
         getUsers,
-        setMessages,
+        getMessages,
         sendMessage,
         setSelectedUser,
         unseenMessages,

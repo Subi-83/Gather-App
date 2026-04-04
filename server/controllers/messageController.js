@@ -13,7 +13,7 @@ export const getAllUsersExceptLoggedIn = async (req, res) => {
         // Count number of messages not seen
         const unseenMessageCounts = {}
         const promises = filteredUsers.map(async (user) => {
-            const messages = await Message.find({senderId: user._id, resceiverId: userId, seen: false})
+            const messages = await Message.find({senderId: user._id, receiverId: userId, seen: false})
             if(messages.length > 0){
                 unseenMessageCounts[user._id] = messages.length;
             }
@@ -81,17 +81,18 @@ export const sendMessage = async (req, res) => {
         const receiverId = req.params.id;
         const senderId = req.user._id;
         let imageUrl;
-        if(image){
+
+        if (image) {
             const uploadResponse = await cloudinary.uploader.upload(image);
             imageUrl = uploadResponse.secure_url;
         }
-        const newMessage = new Message.create({
+
+        const newMessage = await Message.create({
             senderId,
             receiverId,
-            text,
-            image: imageUrl
-        });
-
+            content: text || "",   // ✅ IMPORTANT
+            image: imageUrl || ""  // ✅ IMPORTANT
+});
         // Emit the new message to the receiver's socket
         const receiverSocketId = userSocketMap[receiverId];
         if (receiverSocketId) {
