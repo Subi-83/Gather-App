@@ -1,4 +1,23 @@
 {
+  "name": "gather-chat",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "setup": "npm install",
+    "dev": "concurrently -n client,server -c cyan,green \"npm:dev:client\" \"npm:dev:server\"",
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run dev --workspace server",
+    "build": "npm run build --workspace client",
+    "lint": "npm run lint --workspace client",
+    "start": "npm run start --workspace server",
+    "check": "npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
   "dependencies": {
     "tailwind-scrollbar": "^4.0.2"
   }

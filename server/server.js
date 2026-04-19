@@ -1,12 +1,12 @@
 // server.js
-import express from 'express';
-import "dotenv/config";
 import cors from 'cors';
+import "dotenv/config";
+import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import { connectDB } from './lib/db.js';
-import userRouter from './routes/userRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 // Create Express app
 const app = express();
@@ -47,24 +47,15 @@ app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
 
-// Port
-const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
 
-// Start server **only after MongoDB is connected**
-const startServer = async () => {
-    try {
-        if (!process.env.MONGODB_URI) {
-            throw new Error("MONGODB_URI not defined in .env");
-        }
+if (!MONGO_URI) {
+    throw new Error("Missing MONGO_URI or MONGODB_URI. Add one to server environment variables.");
+}
 
-        await connectDB(process.env.MONGODB_URI);
-        console.log("MongoDB connected, starting server...");
+await connectDB(MONGO_URI);
 
-        server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    } catch (error) {
-        console.error("Server failed to start:", error);
-        process.exit(1); // Stop the process if DB connection fails
-    }
-};
-
-startServer();
+const PORT = process.env.PORT  || 5000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
