@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-app.options("*", cors());
+app.options(/.*/, cors());
 
 // Routes
 app.get("/", (req, res) => {

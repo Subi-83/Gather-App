@@ -1,7 +1,6 @@
-import User from "../models/User.js";
-import Message from "../models/Message.js";
 import cloudinary from "../lib/cloudinary.js";
-import { io, userSocketMap } from "../server.js";
+import Message from "../models/Message.js";
+import User from "../models/User.js";
 
  
 // Get all users except the logged-in user
@@ -93,11 +92,6 @@ export const sendMessage = async (req, res) => {
             content: text || "",   // ✅ IMPORTANT
             image: imageUrl || ""  // ✅ IMPORTANT
 });
-        // Emit the new message to the receiver's socket
-        const receiverSocketId = userSocketMap[receiverId];
-        if (receiverSocketId) {
-            io.to(receiverSocketId).emit("new-message", newMessage);
-        }
 
         res.json({success: true, message: newMessage});
     }
