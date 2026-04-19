@@ -43,7 +43,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cors());
 
 // Routes
-app.use("/", (req, res) => res.send("Server is live"));
+app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
 
