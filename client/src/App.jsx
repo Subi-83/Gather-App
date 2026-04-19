@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { AuthContext } from "./context/AuthContext.jsx";
 import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
-import { Toaster } from 'react-hot-toast';
-import { AuthContext } from "./context/AuthContext.jsx";
 
 const App = () => {
   const { authUser } = useContext(AuthContext);
 
   return (
-    <div  className="bg-cover backdrop-blur-2xl bg-[urls('./bgImage.jpg')] "
+    <div  className="bg-cover backdrop-blur-2xl bg-[url('./bgImage.jpg')] "
     >
       <Toaster />
 
