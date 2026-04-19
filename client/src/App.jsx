@@ -10,7 +10,7 @@ const App = () => {
   const { authUser } = useContext(AuthContext);
 
   return (
-    <div  className="bg-cover backdrop-blur-2xl bg-[url('./bgImage.jpg')] "
+    <div  className="bg-cover backdrop-blur-2xl bg-[url('/bgImage.jpg')] "
     >
       <Toaster />
 
