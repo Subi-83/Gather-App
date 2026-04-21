@@ -12,9 +12,20 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
+const allowedOrigins = [
+  "https://gather-app-react-client.vercel.app",
+  "https://gather-app-react-client-hohqhpew1-subi-83s-projects.vercel.app"
+];
+
 app.use(
   cors({
-    origin: "https://gather-app-react-client.vercel.app",
+    origin: function(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true,
