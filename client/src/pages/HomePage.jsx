@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
-import Sidebar from '../components/Sidebar'
+import { useContext } from 'react'
 import ChatContainer from '../components/ChatContainer'
 import RightSidebar from '../components/RightSidebar'
+import Sidebar from '../components/Sidebar'
 import { ChatContext } from '../context/ChatContext'
 
 const HomePage = () => {
-  
-
-  const [selectedUser ] = useState(ChatContext)
+  const { selectedUser } = useContext(ChatContext)
   
 
   return (

@@ -1,7 +1,7 @@
-import React, { useContext,useEffect,useState } from 'react'
-import { imagesDummyData } from '../assets/assets'
-import { ChatContext } from '../context/ChatContext'
+import { useContext, useEffect, useState } from 'react'
+import assets from '../assets/assets.js'
 import { AuthContext } from '../context/AuthContext'
+import { ChatContext } from '../context/ChatContext'
 
 
 const RightSidebar = () => {
@@ -23,7 +23,7 @@ const RightSidebar = () => {
           <img src={selectedUser?.profilePic || assets.avatar_icon} alt={selectedUser?.name} className='w-20 aspect-square rounded-full'/>
 
         <h1 className='px-6 text-xl font-medium mx-auto flex items-center gap-2'>
-            {onlineUsers.includes(selectedUser?.id) && (
+          {onlineUsers?.includes(selectedUser?._id) && (
                 <p className='w-2 h-2 rounded-full bg-green-500'></p>
             )}
             {selectedUser?.fullName}
@@ -36,9 +36,9 @@ const RightSidebar = () => {
         
         <div className="px-5">
             <p>Media</p> 
-            <div className='mt-2 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500 scrollbar-track-transparent grid grid-cols-2 gap-4 opacity-80'>
+                <div className='mt-2 max-h-50 overflow-y-auto scrollbar-thin scrollbar-thumb-violet-500 scrollbar-track-transparent grid grid-cols-2 gap-4 opacity-80'>
                  {msgImages.map((url,index)=>(
-                    <div key={index} onClick={()=>window.open(url)}
+                  <div key={index} onClick={()=>window.open(url, '_blank', 'noopener,noreferrer')}
                     className='cursor-pointer rounded'>
                       <img src={url} alt="" className='h-full rounded-md'/>
                       
