@@ -92,23 +92,29 @@ export const AuthProvider = ({ children }) => {
 
     // ✅ Socket Connection
     const connectSocket = (userData) => {
-        if (!userData || socket?.connected) return;
+    if (!userData) return;
 
-       const newSocket = io(backendUrl, {
-            transports: ["websocket"],
-            query: {
-                userId: userData._id,
-            },
-        });
-        
-        newSocket.on("online-users", (users) => {
-            setOnlineUsers(users);
-        });
+    const newSocket = io(backendUrl, {
+        transports: ["websocket"],
+        query: {
+            userId: userData._id,
+        },
+    });
 
-        setSocket(newSocket);
+    newSocket.on("connect", () => {
+        console.log("Socket connected:", newSocket.id);
 
-        
-    };
+        // ✅ tell server user is online
+        newSocket.emit("user-online", userData._id);
+    });
+
+    newSocket.on("online-users", (users) => {
+        console.log("Online users:", users);
+        setOnlineUsers(users);
+    });
+
+    setSocket(newSocket);
+};
 
     // ✅ Run once when token changes
     useEffect(() => {

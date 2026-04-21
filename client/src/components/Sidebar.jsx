@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     getUsers();
-  }, [onlineUsers]);
+  }, []);
 
   return (
     <div className={`bg-[#29bdc4]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${selectedUser ? "max-md:hidden" : '' }`}>
@@ -55,7 +55,7 @@ const Sidebar = () => {
                 <div className='flex flex-col leading-5'>
                     <p className='text-sm font-medium truncate'>{user.fullName} </p>
                     {
-                        onlineUsers?.includes(user._id)
+                        onlineUsers?.some(id => id.toString() === user._id.toString())
                         ? <span className='text-green-400 text-xs' >Online </span>
                         : <span className='text-neutral-400 text-xs'>Offline</span>
                     }
